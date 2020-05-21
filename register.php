@@ -3,51 +3,76 @@
 ?>
 <?php
   $firstnameErr = $lastnameErr = $addressErr = $phoneErr = $emailErr = $passwordErr = $confirmErr = $typeErr = "";
+
+  //sanitize form inputs
+  function sanitize_data($data) {
+    $data = trim($data);
+    $data = stripcslashes($data);
+    $data = htmlspecialchars($data);
+
+    return $data;
+  }
+
 //Check if register button is set
 if(isset($_POST['submit'])) {
   //create form fields
-  $firstname = mysqli_real_escape_string($connection, $_POST['firstname']);
-  $lastname = mysqli_real_escape_string($connection, $_POST['lastname']);
-  $address = mysqli_real_escape_string($connection, $_POST['address']);
-  $phone = mysqli_real_escape_string($connection, $_POST['phone']);
-  $email = mysqli_real_escape_string($connection, $_POST['email']);
-  $password = mysqli_real_escape_string($connection, $_POST['password']);
-  $confirm_password = mysqli_real_escape_string($connection, $_POST['confirm_password']);
-  $user_type = $_POST['user_type'];
+  
 
   //if errors exists
-  if(empty($firstname)) {
+  if(empty($_POST['firstname'])) {
     $firstnameErr = "Please enter your firstname";
+  } else {
+    $firstname = sanitize_data($_POST['firstname']);
   }
-  elseif(empty($lastname)) {
+  if(empty($_POST['lastname'])) {
     $lastnameErr = "Please enter your lastname";
+  } else {
+    $lastname = sanitize_data($_POST['lastname']);
   }
-  elseif(empty($address)) {
+  if(empty($_POST['address'])) {
     $addressErr = "Please enter a valid address";
+  } else {
+    $address = sanitize_data($_POST['address']);
   }
-  elseif(empty($phone)) {
+  if(empty($_POST['phone'])) {
     $phoneErr = "Please enter your phone number";
+  } else {
+    $phone = sanitize_data($_POST['phone']);
   }
-  elseif(empty($email)) {
+  if(empty($_POST['email'])) {
     $emailErr = "Please enter your email address";
+  } else {
+    $email = sanitize_data($_POST['email']);
   }
-  elseif(empty($password)) {
+  if(empty($_POST['password'])) {
     $passwordErr = "Please enter your password";
+  } else {
+    $password = sanitize_data($_POST['password']);
+    $hashFormat = "$2y$10$";
+    $salt = 'iusesomecrazystrings22';
+    $hashF_and_salt = $hashFormat . $salt;
+    $password = crypt($password, $hashF_and_salt);
   }
-  elseif(empty($confirm_password) || $confirm_password != $password) {
+  if(empty($_POST['confirm_password']) || $_POST['confirm_password'] != $_POST['password']) {
     $confirmErr = "Passwords do not match";
-  }
-  elseif(empty($user_type)) {
-    $typeErr = "Please select type of user";
-  }
-  //if no errors exists
+  } else {
+    $confirm_password = sanitize_data($_POST['confirm_password']);
+  } 
+
+  //if no errors exists check if email is already registered
+    $qry = mysqli_query($connection, "SELECT * FROM users WHERE email ='$email'");
+    //if found
+    if(mysqli_num_rows($qry) > 0) {
+      echo "<p class='alert alert-danger'>Email has already been reegistered.</p>";
+    }
+    //if email address has not been registered, proceed with registration. 
   else {
-    $sql = "INSERT INTO users(firstname, lastname, email, phone, password, address, user_type) VALUES('$firstname', '$lastname', '$email', '$phone', '$password', '$address', '$user_type')";
-    $insert_user = mysqli_query($connection, $sql);
-    if($insert_user) {
-      echo "<p class='alert alert-success'>Congratulations, You have successfully registered</p>";
+    $sql = "INSERT INTO users(firstname, lastname, email, phone, password, address) VALUES('$firstname', '$lastname', '$email', '$phone', '$password', '$address')";
+    // $insert_user = mysqli_query($connection, $sql);
+    if($connection->query($sql) === TRUE) {
+      echo "<p class='alert alert-success text-center'>Congratulations, You have successfully registered</p>";
     } else {
-       echo "<p class='alert alert-danger'>Sorry, your registration was not successful</p>";
+       echo "<p class='alert alert-danger text-center'>Sorry, your registration was not successful</p>" . mysqli_error($connection);
     }
   }
 
@@ -99,93 +124,31 @@ if(isset($_POST['submit'])) {
         <input type="text" class="form-control" name="firstname" placeholder="First Name">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
-      <?php
-        if($firstnameErr) {
-          echo "<strong style='color:red;'>".$firstnameErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
+      
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name="lastname" placeholder="Last Name">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
-      <?php
-        if($lastnameErr) {
-          echo "<strong style='color:red;'>".$lastnameErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name="address" placeholder="User Address">
         <span class="glyphicon glyphicon-house form-control-feedback"></span>
       </div>
-      <?php
-        if($addressErr) {
-          echo "<strong style='color:red;'>".$addressErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
       <div class="form-group has-feedback">
         <input type="text" class="form-control" name="phone" placeholder="Phone">
         <span class="glyphicon glyphicon-phone form-control-feedback"></span>
       </div>
-      <?php
-        if($phoneErr) {
-          echo "<strong style='color:red;'>".$phoneErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
       <div class="form-group has-feedback">
         <input type="email" class="form-control" name="email" placeholder="Email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
-      <?php
-        if($emailErr) {
-          echo "<strong style='color:red;'>".$emailErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
-      <div class="form-group has-feedback">
-        <select class="form-control" name="user_type">
-          <option>--Select Type of User--</option>
-          <option value="2">House Owner</option>
-          <option value="3">Client</option>
-        </select>
-      </div>
-      <?php
-        if($typeErr) {
-          echo "<strong style='color:red;'>".$typeErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
       <div class="form-group has-feedback">
         <input type="password" class="form-control" name="password" placeholder="Password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
-      <?php
-        if($passwordErr) {
-          echo "<strong style='color:red;'>".$passwordErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
       <div class="form-group has-feedback">
         <input type="password" class="form-control" name="confirm_password" placeholder="Retype password">
         <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
       </div>
-      <?php
-        if($confirmErr) {
-          echo "<strong style='color:red;'>".$confirmErr."</strong>";
-        } else {
-          echo "";
-        }
-      ?>
       <div class="row">
         <div class="col-xs-8">
           <div class="checkbox icheck">

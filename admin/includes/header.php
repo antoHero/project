@@ -1,5 +1,11 @@
 <?php
+if(!session_id())
 session_start();
+if($_SESSION['logon'] == 'admin') {
+  die("<p class='alert alert-danger text-center'>You do not have permission to view this page.</p>");
+}
+?>
+<?php
 $connection = mysqli_connect("127.0.0.1", "root", "secret", "her_project");
   if(!$connection):
     die('connection error (' .mysqli_connect_errno() . ') '. mysqli_connect_error());
@@ -51,7 +57,7 @@ $connection = mysqli_connect("127.0.0.1", "root", "secret", "her_project");
 
   <header class="main-header">
     <!-- Logo -->
-    <a href="index2.html" class="logo">
+    <a href="../index.php" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini"><b>A</b>LT</span>
       <!-- logo for regular state and mobile devices -->

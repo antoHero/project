@@ -5,40 +5,6 @@
 <title>Real Estate Management</title>
 <?php include('includes/header.php');?>
 
-	<div class="front">
-		<form>
-			<h1 class="home-text">Housing Manegement System</h1>
-			<div class="form">
-				<input type="text" name="" placeholder="Search Property Type" class="search-field service">
-				<input type="text" name="" placeholder="Location...." class="search-field location">
-				<button class="btn" type="button">Search...</button>
-			</div>
-		</form>
-	</div>
-	<!-- Menu -->
-
-	<div class="menu trans_500">
-		<div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
-			<div class="menu_close_container"><div class="menu_close"></div></div>
-			<div class="logo menu_logo">
-				<a href="#">
-					<div class="logo_container d-flex flex-row align-items-start justify-content-start">
-						<div class="logo_image"><div><img src="images/logo.png" alt=""></div></div>
-					</div>
-				</a>
-			</div>
-			<ul>
-				<li class="menu_item"><a href="index.php">Home</a></li>
-				<li class="menu_item"><a href="about.html">About us</a></li>
-				<li class="menu_item"><a href="#">Speakers</a></li>
-				<li class="menu_item"><a href="#">Tickets</a></li>
-				<li class="menu_item"><a href="news.html">News</a></li>
-				<li class="menu_item"><a href="contact.html">Contact</a></li>
-			</ul>
-		</div>
-		<div class="menu_phone"><span>call us: </span>+234 345 3222 11</div>
-	</div>
-
 	<!-- Recent -->
 
 	<div class="recent">
@@ -116,7 +82,6 @@
 							<div class="recent_slider_nav recent_slider_next"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
 						</div>
 					</div>
-					<div class="button recent_button"><a href="properties.php">see more</a></div>
 				</div>
 			</div>
 		</div>

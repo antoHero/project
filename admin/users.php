@@ -1,6 +1,11 @@
 <?php include "includes/header.php";?>
 <?php include "includes/sidebar.php";?>
-
+<?php
+session_start();
+if(isset($_SESSION['type']) != 1) {
+  die('You do not have access to this page');
+}
+?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -40,6 +45,7 @@
                     <?php
                       $i = 1; //to increment the S/NO
 
+                      $houseowner = "Houseowner";
                       //fetch all the users
                       $qry = "SELECT * FROM users ORDER BY id DESC";
                       $result = mysqli_query($connection, $qry);
@@ -51,6 +57,11 @@
                           $phone = $row['phone'];
                           $type = $row['user_type'];
                           $address = $row['address'];
+
+                          if($type == 2) {
+                            $type = $houseowner;
+                          }
+
                       
                           echo "<tr>";
                           echo "<td>".$i++."</td>";

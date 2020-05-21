@@ -3,9 +3,10 @@
 ?>
 <?php
 session_start();
-  $firstnameErr = $lastnameErr = $addressErr = $phoneErr = $emailErr = $passwordErr = $confirmErr = $typeErr = "";
+  $email = $password = "";
+  $emailErr = $passwordErr = "";
   //sanitize data
-  function sanitize($data) {
+  function sanitize_data($data) {
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
@@ -15,42 +16,45 @@ session_start();
   }
 //Check if register button is set
 if($_SERVER['REQUEST_METHOD'] == 'POST') {
-  //create form fields
-  $email = sanitize($_POST['email']);
-  $password = $_POST['password'];
 
   //if errors exists
-  if(empty($firstname)) {
-    $firstnameErr = "Please enter your firstname";
+  if(empty($_POST['email'])) {
+    $emailErr = "Please enter your firstname";
+  } else {
+    $email = sanitize_data($_POST['email']);
   }
-  elseif(empty($password)) {
+  if(empty($_POST['password'])) {
     $passwordErr = "Please enter your password";
+  } else {
+    $password = $_POST['password'];
   }
   //if no errors exists, check if the email address is correct
-  $sql = "SELECT * FROM users WHERE email='$email' AND password='$password'";
+  $sql = "SELECT * FROM users WHERE email='$email'";
   $result = mysqli_query($connection, $sql) or die(mysql_error());
 
   //if email address is found
   if(mysqli_num_rows($result) == 1) {
     //store all user details in an array
     $row = mysqli_fetch_assoc($result);
-      if($row['user_type'] == 2) {
-        session_regenerate_id();
+      if(password_verify($password, $row['password'])) 
+        if($row['user_type'] == 1) {
+        if(!session_id())
+        session_start();
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user'] = $row['lastname'];
-        $_SESSION['type'] = $row['user_type'];
-        session_write_close();
-        header('location: houseowner');
+        $_SESSION['logon'] = 'admin';
+        header('location: admin/users.php');
         exit();
       } else {
-        session_regenerate_id();
+        if(!session_id())
+        session_start();
         $_SESSION['user_id'] = $row['id'];
         $_SESSION['user'] = $row['lastname'];
-        $_SESSION['type'] = $row['user_type'];
-        session_write_close();
-        header('location: client');
+        $_SESSION['logon'] = 'owner';
+        header('location: houseowner');
         exit();
       }
+      
     } 
    else {
     echo "<p class='alert alert-danger'>Email/Password Combination Incorrect</p>" . $connection->error;
@@ -68,7 +72,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Registration Page</title>
+  <title>Login Page</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
   <!-- Bootstrap 3.3.7 -->

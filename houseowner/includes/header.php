@@ -1,8 +1,11 @@
-<?php require('../db/db.php');
-  session_start();
-  if(isset($_SESSION['type']) != 2) {
-    die('You do not have access to this page');
-  }
+<?php require('../db/db.php');?>
+<?php 
+if(!session_id())
+session_start();
+if($_SESSION['logon'] != 'owner') {
+  die("You do not have permission to view this page");
+}
+
 ?>
 <!DOCTYPE html>
 <html>

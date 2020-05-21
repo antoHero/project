@@ -20,7 +20,7 @@
       
       <!-- /.row -->
       <!-- Main row -->
-      
+        <h1 class="text-center">Use Sidebar to Navigate</h1>
       <!-- /.row (main row) -->
 
     </section>

@@ -14,6 +14,7 @@
 <link rel="stylesheet" type="text/css" href="plugins/rangeslider.js-2.3.0/rangeslider.css">
 <link rel="stylesheet" type="text/css" href="styles/property.css">
 <link rel="stylesheet" type="text/css" href="styles/property_responsive.css">
+<link rel="stylesheet" type="text/css" href="styles/front.css">
 </head>
 <body>
 
@@ -45,12 +46,12 @@
 	          <?php echo $_SESSION['user'];?>
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="houseowner">My account</a>
-	          <a class="dropdown-item" href="login.php">Logout</a>
+	          <a class="dropdown-item" href="houseowner/profile.php">My account</a>
+	          <a class="dropdown-item" href="logout.php">Logout</a>
 	        </div>
 	      </li>
 	      <li class="nav-item my-2 my-lg-0">
-	        <a class="nav-link btn btn-outline-success align-right" href="houseowner/add_property.php">Post a property </a>
+	        <a class="nav-link align-right" style="background-color: #f44336; color: #fff;" href="houseowner/add_property.php">Post a property </a>
 	      </li>
 	      <?php
 	      	} else {
