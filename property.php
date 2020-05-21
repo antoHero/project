@@ -127,14 +127,8 @@
 				</div>
 			</div>
 		</div>
+		<img src="images/<?php echo $listing_image; ?>" alt="<?php echo $listing_name?>" width="100%" height="500">
 		<div class="intro_slider_container">
-
-			<!-- Intro Slider -->
-			<div class="owl-carousel owl-theme intro_slider">
-				<!-- Slide -->
-				<div class="owl-item"><img src="images/<?php echo $listing_image; ?>" alt="<?php echo $listing_name?>" height="500"></div>
-				<!-- Slide -->
-			</div>
 
 			<!-- Intro Slider Nav -->
 			<div class="intro_slider_nav_container">

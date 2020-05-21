@@ -46,6 +46,7 @@ if(isset($_SESSION['type']) != 1) {
                       $i = 1; //to increment the S/NO
 
                       $houseowner = "Houseowner";
+                      $admin = "Admin";
                       //fetch all the users
                       $qry = "SELECT * FROM users ORDER BY id DESC";
                       $result = mysqli_query($connection, $qry);
@@ -56,10 +57,14 @@ if(isset($_SESSION['type']) != 1) {
                           $email = $row['email'];
                           $phone = $row['phone'];
                           $type = $row['user_type'];
+                          $image = $row['image'];
                           $address = $row['address'];
 
-                          if($type == 2) {
+                          if($type == 2)  {
                             $type = $houseowner;
+                          }
+                          if($type == 1) {
+                            $type = $admin;
                           }
 
                       
@@ -70,7 +75,7 @@ if(isset($_SESSION['type']) != 1) {
                           echo "<td>".$phone."</td>";
                           echo "<td>".$type."</td>";
                           echo "<td>".$address."</td>";
-                          echo "<td><img src='../images/$image' alt='$name' width='100'></td>";
+                          echo "<td><img src='../images/".$image."' alt='$name' width='100'></td>";
                           echo "<td><a href='users.php?delete=$id' type='submit' class='btn btn-danger'>Delete</a></td>";
                           echo "</tr>";
                       }

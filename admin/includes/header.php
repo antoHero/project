@@ -1,7 +1,7 @@
 <?php
 if(!session_id())
 session_start();
-if($_SESSION['logon'] == 'admin') {
+if($_SESSION['logon'] != 'admin') {
   die("<p class='alert alert-danger text-center'>You do not have permission to view this page.</p>");
 }
 ?>

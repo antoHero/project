@@ -62,7 +62,7 @@
             $updateUser = mysqli_query($connection, $qry);
             // var_dump($updateListing);
             if($updateUser) {
-              if($user_password == $password) {
+              if(password_verify($password, $user_password)) {
                 $_SESSION['success'] = "Profile updated successfully";
                 header('location: profile.php');
               } else {
