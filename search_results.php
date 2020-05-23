@@ -5,39 +5,28 @@
 <title>Real Estate Management</title>
 <?php include('includes/header.php');?>
 
-	<div class="front">
-		<form action="search_results.php" method="POST">
-			<h1 class="home-text">Housing Manegement System</h1>
-			<div class="form">
-				<input type="hidden" name="search" placeholder="Search Property Type" class="search-field service">
-				<input type="text" name="location" placeholder="Location...." class="search-field location" style="width: 700px;">
-				<input type="submit" name="search" class="btn" value="Search...">
-			</div>
-			<span>Type of property like: Bungalow, duplex</span>
-		</form>
-	</div>
-	<!-- Menu -->
+	<!-- search results -->
 
-	<div class="menu trans_500">
-		<div class="menu_content d-flex flex-column align-items-center justify-content-center text-center">
-			<div class="menu_close_container"><div class="menu_close"></div></div>
-			<div class="logo menu_logo">
-				<a href="#">
-					<div class="logo_container d-flex flex-row align-items-start justify-content-start">
-						<div class="logo_image"><div><img src="images/logo.png" alt=""></div></div>
-					</div>
-				</a>
-			</div>
-			<ul>
-				<li class="menu_item"><a href="index.php">Home</a></li>
-				<li class="menu_item"><a href="about.html">About us</a></li>
-				<li class="menu_item"><a href="#">Speakers</a></li>
-				<li class="menu_item"><a href="#">Tickets</a></li>
-				<li class="menu_item"><a href="news.html">News</a></li>
-				<li class="menu_item"><a href="contact.html">Contact</a></li>
-			</ul>
-		</div>
-		<div class="menu_phone"><span>call us: </span>+234 345 3222 11</div>
+	<div class="container" style="padding: 20px 0 0 0;">
+		<h3 class="section_title">Search results</h3>
+		<?php
+			if(isset($_POST['search'])) {
+				$location = $_POST['location'];
+				// $name = $_POST['search'];
+				$search_query = mysqli_query($connection, "SELECT * FROM listing WHERE location LIKE '%".$location."%'");
+				if(mysqli_num_rows($search_query) > 0) {
+					while ($search_row = mysqli_fetch_assoc($search_query)) {
+
+						echo "<div><a href='property.php?id=".$search_row['id']."&user=".$search_row['user_id']."'> ".$search_row['name']." </a></div>";
+					}
+				} else {
+					header('location: 404.php');
+				}
+			} else {
+				header('location: index.php');
+			}
+		?>
+
 	</div>
 
 	<!-- Recent -->
